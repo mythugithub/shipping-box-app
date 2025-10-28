@@ -69,21 +69,35 @@ const AddBoxForm: React.FC<AddBoxFormProps> = ({ onAddBox, onViewChange }) => {
                         { required: true, message: 'Weight is required' },
                         {
                             validator: (_, value) => {
-                                if (value === undefined || value === null) {
-                                    return Promise.resolve(); // let required rule handle empty
-                                }
-                                return value > 0
-                                    ? Promise.resolve()
-                                    : Promise.reject(new Error('Weight must be greater than 0 kg'));
-                            }
-
+                                if (value === undefined || value === null) return Promise.resolve();
+                                if (value <= 0) return Promise.reject(new Error('Weight must be greater than 1 gram'));
+                                return Promise.resolve();
+                            },
                         },
                     ]}
                 >
-                    <InputNumber className="w-full" placeholder="Enter weight in kg" onKeyDown={(e) => {
-                        // Prevent typing '-', 'e', '+'
-                        if (['-', 'e', '+'].includes(e.key)) e.preventDefault();
-                    }} />
+                    <InputNumber
+                        className="w-auto"
+                        placeholder="Enter weight in kg"
+                        onKeyDown={(e) => {
+                            if (['-', '+', 'e'].includes(e.key)) e.preventDefault();
+
+                            const input = e.target as HTMLInputElement;
+                            const currentValue = input.value;
+                            const cursorPos = input.selectionStart || 0;
+
+                            if (currentValue.includes('.')) {
+                                const [intPart, decPart] = currentValue.split('.');
+                                // Check if cursor is in decimal part
+                                if (cursorPos > intPart.length) {
+                                    if (decPart.length >= 3 && e.key >= '0' && e.key <= '9') {
+                                        e.preventDefault();
+                                    }
+                                }
+                            }
+                        }}
+                    />
+
                 </Form.Item>
 
                 <Form.Item

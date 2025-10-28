@@ -28,7 +28,7 @@ const App: React.FC = () => {
 
   return (
       <Layout className="min-h-screen bg-transparent! flex flex-col">
-        <Header className="flex items-center justify-between">
+        <Header className="flex items-center justify-between p-5!">
           <Navbar activeView={activeView} onViewChange={handleViewChange} />
         </Header>
         <Content className="flex-1 p-5">

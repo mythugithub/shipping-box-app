@@ -55,7 +55,7 @@ const ViewBoxTable: React.FC<ViewBoxTableProps> = ({ boxes, onViewChange }) => {
 
   return (
     <div className="bg-white rounded-lg shadow-md">
-      <Table dataSource={boxes} columns={columns} rowKey="id" pagination={false} scroll={{ x: 'max-content' }}/>
+      <Table dataSource={boxes} columns={columns} rowKey="id" pagination={boxes.length > 10 ? { pageSize: 10 } : false} scroll={{ x: 'max-content' }}/>
     </div>
   );
 };

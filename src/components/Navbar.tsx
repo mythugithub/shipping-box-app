@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Drawer } from "antd";
 
 interface NavbarProps {
     activeView: "add" | "view";
@@ -11,22 +12,26 @@ const tabs = [
 ];
 
 const TabList = (
-  vertical: boolean,
-  activeView: "add" | "view",
-  handleViewChange: (view: "add" | "view") => void
+    vertical: boolean,
+    activeView: "add" | "view",
+    handleViewChange: (view: "add" | "view") => void
 ) => (
-  <div className={`flex ${vertical ? "flex-col" : "flex-row"} gap-3`}>
-    {tabs.map((t) => (
-      <button
-        key={t.key}
-        onClick={() => handleViewChange(t.key as "add" | "view")}
-        className={`px-4 py-2 rounded-md text-white transition
-          ${activeView === t.key ? "bg-white/20 shadow-inner" : "bg-transparent hover:bg-white/10"}`}
-      >
-        {t.label}
-      </button>
-    ))}
-  </div>
+    <div className={`flex ${vertical ? "flex-col" : "flex-row"} gap-3`}>
+        {tabs.map((t) => (
+            <button
+                key={t.key}
+                onClick={() => handleViewChange(t.key as "add" | "view")}
+                className={`
+          rounded-md text-white transition
+          px-3 py-1 text-sm                /* default = mobile */
+          sm:px-4 sm:py-2 sm:text-base     /* desktop override */
+          ${activeView === t.key ? "bg-white/20 shadow-inner" : "bg-transparent hover:bg-white/10"}
+        `}
+            >
+                {t.label}
+            </button>
+        ))}
+    </div>
 );
 
 const Navbar: React.FC<NavbarProps> = ({ activeView, onViewChange }) => {
@@ -56,19 +61,22 @@ const Navbar: React.FC<NavbarProps> = ({ activeView, onViewChange }) => {
             </button>
 
             {/* Drawer */}
-            {drawerVisible && (
-                <div className="fixed inset-0 z-9999 bg-black/50 flex justify-end">
-                    <div className="w-2/3 max-w-xs bg-gray-900 h-full p-6 flex flex-col gap-6">
-                        <button
-                            onClick={() => setDrawerVisible(false)}
-                            className="text-white text-xl self-end"
-                        >
-                            ✕
-                        </button>
-                        {TabList(true, activeView, handleViewChange)}
-                    </div>
+            <Drawer
+                placement="right"
+                open={drawerVisible}
+                onClose={() => setDrawerVisible(false)}
+                closable={false}
+                width="60%"
+                className="bg-gray-900!"
+                closeIcon={<span style={{ color: "white", fontSize: 20 }}>✕</span>}
+            >
+                <div className="flex justify-end mb-4">
+                    <button onClick={() => setDrawerVisible(false)} className="text-white text-xl">
+                        ✕
+                    </button>
                 </div>
-            )}
+                {TabList(true, activeView, handleViewChange)}
+            </Drawer>
         </>
     );
 };

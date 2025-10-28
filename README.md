@@ -13,7 +13,7 @@ A modern React application for calculating shipping costs of boxes to specific l
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/mythugithub/shipping-box-app.git
 cd shipping-box
 ```
 
